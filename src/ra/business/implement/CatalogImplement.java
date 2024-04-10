@@ -23,7 +23,7 @@ public class CatalogImplement implements ICatalogDesign {
             System.err.println("Danh sách danh mục trống");
         }else {
             System.out.println("Danh sách danh mục :");
-            catalogsList.sort(Comparator.comparing(Catalogs::getCreatedAt));
+            catalogsList.sort(Comparator.comparing(Catalogs::getCreatedAt)); // sắp xếp theo thời gian thêm mới nhất
             catalogsList.forEach(Catalogs::displayData);
             System.out.println("==================================");
         }

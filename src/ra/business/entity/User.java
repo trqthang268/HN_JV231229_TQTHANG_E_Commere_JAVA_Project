@@ -4,6 +4,7 @@ import ra.config.InputMethods;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Serializable {
@@ -17,7 +18,7 @@ public class User implements Serializable {
     private String email;
     private String phoneNumber;
     private String address;
-    private List<CartItem> cart;
+    private List<CartItem> cartItemList = new ArrayList<>();
     private RoleNameUser role;
     private boolean userStatus;
 
@@ -33,7 +34,7 @@ public class User implements Serializable {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        this.cart = cart;
+        this.cartItemList = cart;
         this.role = role;
         this.userStatus = userStatus;
     }
@@ -103,11 +104,11 @@ public class User implements Serializable {
     }
 
     public List<CartItem> getCart() {
-        return cart;
+        return cartItemList;
     }
 
     public void setCart(List<CartItem> cart) {
-        this.cart = cart;
+        this.cartItemList = cart;
     }
 
     public RoleNameUser getRole() {
@@ -210,7 +211,7 @@ public class User implements Serializable {
             case ROLE_USER:
                 roleUser = "User";
                 System.out.printf("| Mã : %d | Tên : %s %s | Tên đăng nhập : %s | Mật khẩu : %s | Email : %s | Sdt : %s |\n",userId,firstName,lastName,userName,password,email,phoneNumber);
-                System.out.printf("| Địa chỉ : %s | Giỏ hàng : %s | Role : %s | Trạng thái : %s |",address,cart.toString(),roleUser,userStatus?"Unblock":"Block");
+                System.out.printf("| Địa chỉ : %s | Giỏ hàng : %s | Role : %s | Trạng thái : %s |",address,cartItemList.toString(),roleUser,userStatus?"Unblock":"Block");
                 break;
             case ROLE_ADMIN:
                 roleUser = "Admin";
