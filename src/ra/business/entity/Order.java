@@ -122,19 +122,22 @@ public class Order implements Serializable {
 
     public void inputDataOrder(){
         this.orderId = inputOrderId(orderList);
-        this.userId = inputUserId();
+        //this.userId = inputUserId();
         this.nameReceive = inputReceiveName();
         this.receivePhoneNumber = inputReceivePhone();
         this.receiveAddress = inputReceiveAddress();
+        //this.total += orderDetail.get(n).getUnitPrice * orderDetail.get(n).getQuantity;
+        this.orderStatus = OrderStatus.STATUS_WAITING;
+        //orderDetails = List<OrderDetail> thông tin orderdetail được cung cấp bới cartItem của người dùng đang đăng nhập
         this.orderAt = LocalDateTime.now();
         this.deliverAt = this.getOrderAt().plusDays(4);//tối thiểu 4 ngày sau đặt hàng
     }
 
-    private long inputUserId() {
-        System.out.println("Nhập mã người mua");
-        long userIdInput = InputMethods.getLong();
-        return userIdInput;
-    }
+//    private long inputUserId() {
+//        System.out.println("Nhập mã người mua");
+//        long userIdInput = InputMethods.getLong();
+//        return userIdInput;
+//    }
 
     public long inputOrderId(List<Order> orderList) {
         long maxOrderId = orderList.stream().map(order -> order.getOrderId()).max(Comparator.naturalOrder()).orElse(0L);
@@ -161,6 +164,19 @@ public class Order implements Serializable {
      public String inputReceiveAddress(){
          System.out.println("Nhập địa chỉ giao hàng :");
          return InputMethods.getString();
+     }
+
+     public void displayOrderData(){
+        String orderstatus = null;
+        switch (orderStatus){
+            case STATUS_SUCCESS -> orderstatus = "Success";
+            case STATUS_WAITING -> orderstatus = "Waitting";
+            case STATUS_DELIVERING -> orderstatus = "Delivering";
+            default -> System.out.println("Trạng thái không hợp lệ");
+        }
+         System.out.printf("| Mã hóa đơn : %d | Mã người mua : %d | Tên người nhận : %s | SDT người nhận : %s | Địa chỉ người nhận : %s |\n",orderId,userId,nameReceive,receivePhoneNumber,receiveAddress);
+         System.out.printf("| Tổng tiền : %f | Trạng thái đơn hàng : %s | Danh sách chi tiết : %s |\n",total,orderstatus,oderDetails.toString());
+         System.out.printf("| Ngày đặt hàng : %s | Ngày dự kiến giao hàng : %s",orderAt.toString(),deliverAt.toString());
      }
 
 }

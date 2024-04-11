@@ -2,12 +2,14 @@ package ra.presentation.usermanagement;
 
 import ra.business.design.IAuthication;
 import ra.business.implement.AuthenticationService;
+import ra.business.implement.OrderImplement;
 import ra.config.InputMethods;
 
 import static ra.presentation.Main.userActive;
 
 public class Cart {
     AuthenticationService authication = new AuthenticationService();
+    OrderImplement orderImplement = new OrderImplement();
     public void displayCartMenu(){
         while (true) {
             System.out.println("============CART MENU===========");
@@ -29,7 +31,7 @@ public class Cart {
                     authication.deleteCartItem(userActive);
                     break;
                 case 4:
-//                    getOrder(userActive);
+                    orderImplement.getOrder(userActive);
                     break;
                 case 5:
                     return;

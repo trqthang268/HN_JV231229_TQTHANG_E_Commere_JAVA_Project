@@ -49,4 +49,14 @@ public class OrderDetail implements Serializable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "\nĐơn hàng chi tiết{" +
+                "Mã sản phẩm : " + productId +
+                ", Tên sản phẩm : '" + productName + '\'' +
+                ", Đơn giá : " + unitPrice +
+                ", Số lượng : " + quantity +
+                '}';
+    }
 }

@@ -4,6 +4,7 @@ import ra.business.design.IAuthication;
 import ra.business.entity.RoleNameUser;
 import ra.business.entity.User;
 import ra.business.implement.AuthenticationService;
+import ra.config.IOFile;
 import ra.config.InputMethods;
 
 import static ra.business.implement.AuthenticationService.userList;
@@ -87,7 +88,6 @@ public class Main {
     public static void register(){
         System.out.println("==============Đăng kí=============");
         User user = new User();
-        authication.register(user); // set giá trị mặc định cho user bình thường
         System.out.println("Nhập tên đăng nhập :");
         user.inputUserName(userList);
         System.out.println("Nhập họ :");
@@ -103,6 +103,7 @@ public class Main {
         System.out.println("Nhập địa chỉ :");
         user.inputAddress();
         System.out.println("========Đăng kí thành công=========");
+        authication.register(user); // set giá trị mặc định cho user bình thường
         login();
     }
 

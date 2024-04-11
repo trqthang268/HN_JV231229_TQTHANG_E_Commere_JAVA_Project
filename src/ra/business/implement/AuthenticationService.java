@@ -51,12 +51,19 @@ public class AuthenticationService implements IAuthication {
 
     @Override
     public void displayUserList() {
-        System.out.println("Danh sách người dùng");
-        userList.sort(Comparator.comparing(User::getLastName)); // sắp xếp theo tên người dùng
-        for (User user : userList) {
-            if (user.getRole() != RoleNameUser.ROLE_ADMIN) {
-                user.displayData();
-                System.out.println("---------------------------");
+        if (userList.isEmpty()){
+            System.out.println("Danh sách người dùng trống");
+        }else if(userList.size() == 1){
+            System.out.println("Danh sách người dùng chỉ có admin");
+            userList.get(0).displayData();
+        }else{
+            System.out.println("Danh sách người dùng");
+            userList.sort(Comparator.comparing(User::getLastName)); // sắp xếp theo tên người dùng
+            for (User user : userList) {
+                if (user.getRole() != RoleNameUser.ROLE_ADMIN) {
+                    user.displayData();
+                    System.out.println("---------------------------");
+                }
             }
         }
     }
@@ -82,10 +89,11 @@ public class AuthenticationService implements IAuthication {
         System.out.println("Trạng thái cũ của người dùng là " + (userList.get(changeIdIndex).isUserStatus() ? "Unblock" : "Block"));
         userList.get(changeIdIndex).setUserStatus(!userList.get(changeIdIndex).isUserStatus());
         System.out.println("Trạng thái mới của người dùng là " + (userList.get(changeIdIndex).isUserStatus() ? "Unblock" : "Block"));
+        IOFile.writeToFile(IOFile.USER_PATH, userList);
     }
 
     private int getNewUserId() { // tìm int id lớn nhất trong userList. tìm thấy thì cộng thêm 1. k thấy thì trả về giá trị 0
-        int maxId = userList.stream().map(user -> user.getUserId()).max(Comparator.naturalOrder()).orElse(0);
+        int maxId = userList.stream().map(User::getUserId).max(Comparator.naturalOrder()).orElse(0);
         return maxId + 1;
     }
 
@@ -99,8 +107,13 @@ public class AuthenticationService implements IAuthication {
     }
 
     public void showListCart(User user) {
-        for (CartItem cartItem : user.getCart()) {
-            System.out.println(cartItem);
+        if (user.getCart().isEmpty()){
+            System.out.println("Giỏ hàng trống");
+        }else {
+            System.out.println("Danh sách sản phẩm trong giỏ hàng");
+            for (CartItem cartItem : user.getCart()) {
+                cartItem.displayCartItemData();
+            }
         }
     }
 
@@ -198,12 +211,69 @@ public class AuthenticationService implements IAuthication {
         }
     }
 
-    public void editUserInfomation() {
+    public void editUserInformation(User user) {
+        byte choise = 0;
+        do{
+            System.out.println("Thông tin bạn muốn chỉnh sửa :");
+            System.out.println("1. Họ và tên");
+            System.out.println("2. Tên đăng nhập");
+            System.out.println("3. Mật khẩu");
+            System.out.println("4. Email");
+            System.out.println("5. Số điện thoại");
+            System.out.println("6. Địa chỉ");
+            System.out.println("7. Thoát");
+            System.out.println("Lựa chọn của bạn :");
+            choise = InputMethods.getByte();
+            switch (choise){
+                case 1:
+                    user.inputFirstName();
+                    user.inputLastName();
+                    IOFile.writeToFile(IOFile.USER_PATH, userList);
+                    break;
+                case 2:
+                    user.inputUserName(userList);
+                    IOFile.writeToFile(IOFile.USER_PATH, userList);
+                    break;
+                case 3:
+                    changePassword(user);
+                    IOFile.writeToFile(IOFile.USER_PATH, userList);
+                    break;
+                case 4:
+                    user.inputEmail(userList);
+                    IOFile.writeToFile(IOFile.USER_PATH, userList);
+                    break;
+                case 5:
+                    user.inputPhone(userList);
+                    IOFile.writeToFile(IOFile.USER_PATH, userList);
+                    break;
+                case 6:
+                    user.inputAddress();
+                    IOFile.writeToFile(IOFile.USER_PATH, userList);
+                    break;
+                case 7:
+                    break;
+                default:
+                    System.out.println("Vui lòng nhập lựa chọn từ 1 đến 7.");
+            }
+        }while (choise!=7);
     }
 
-    public void displayUserInfomation() {
+    public void displayUserInformation(User user) {
+        user.displayData();
     }
 
-    public void changePassword() {
+    public void changePassword(User user) {
+        System.out.println("Nhập mật khẩu cũ :");
+        String oldPassword = InputMethods.getString();
+        boolean checkPassword = BCrypt.checkpw(oldPassword,user.getPassword()); // kiểm tra mật khẩu có khớp hay không(so sánh 2 mật khẩu đã được mã hóa)
+        if (checkPassword){
+            System.out.println("Nhập mật khẩu mới :");
+            user.inputPassword();
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(5)));
+            IOFile.writeToFile(IOFile.USER_PATH, userList);
+            System.out.println("Đã lưu mật khẩu mới.");
+        }else{
+            System.err.println("Mật khẩu sai!! Không thể thay đổi mật khẩu.");
+        }
     }
 }

@@ -3,6 +3,8 @@ package ra.presentation.usermanagement;
 import ra.business.implement.AuthenticationService;
 import ra.config.InputMethods;
 
+import static ra.presentation.Main.userActive;
+
 public class MyAccount {
     AuthenticationService authenticationService = new AuthenticationService();
     public void displayAccountMenu(){
@@ -16,13 +18,13 @@ public class MyAccount {
             byte choice = InputMethods.getByte();
             switch (choice) {
                 case 1:
-                    authenticationService.changePassword();
+                    authenticationService.changePassword(userActive);
                     break;
                 case 2:
-                    authenticationService.displayUserInfomation();
+                    authenticationService.displayUserInformation(userActive);
                     break;
                 case 3:
-                    authenticationService.editUserInfomation();
+                    authenticationService.editUserInformation(userActive);
                     break;
                 case 4:
                     return;

@@ -18,12 +18,16 @@ public class OrderManagement {
             byte choice = InputMethods.getByte();
             switch (choice){
                 case 1:
+                    orderImplement.displayWaitingOrder();
                     break;
                 case 2:
+                    orderImplement.displaySuccessOrder();
                     break;
                 case 3:
+                    orderImplement.changeStatusOrder();
                     break;
                 case 4:
+                    orderImplement.cancelOrder();
                     break;
                 case 5:
                     return;
