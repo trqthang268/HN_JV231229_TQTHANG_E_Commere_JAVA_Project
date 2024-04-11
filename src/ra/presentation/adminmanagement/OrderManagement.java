@@ -5,7 +5,7 @@ import ra.business.implement.OrderImplement;
 import ra.config.InputMethods;
 
 public class OrderManagement {
-    IOderDesign orderImplement = new OrderImplement();
+    public static OrderImplement orderImplement = new OrderImplement();
     public void displayOrderMenu(){
         while (true){
             System.out.println("=========ORDER MENU=========");

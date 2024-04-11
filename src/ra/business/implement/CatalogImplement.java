@@ -79,6 +79,7 @@ public class CatalogImplement implements ICatalogDesign {
         System.out.println("Trạng thái cũ của danh mục là "+(catalogsList.get(changeIdIndex).isCatalogStatus()?"Hoạt động":"Ẩn hoạt động"));
         catalogsList.get(changeIdIndex).setCatalogStatus(!catalogsList.get(changeIdIndex).isCatalogStatus());
         System.out.println("Trạng thái mới của danh mục là "+(catalogsList.get(changeIdIndex).isCatalogStatus()?"Hoạt động":"Ẩn hoạt động"));
+        IOFile.writeToFile(IOFile.CATALOG_PATH,catalogsList);
     }
 
     @Override

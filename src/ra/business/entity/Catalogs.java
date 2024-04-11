@@ -114,6 +114,7 @@ public class Catalogs implements Serializable {
 
     public void displayData() {
         System.out.printf("|Mã danh mục : %-4s | Tên : %-30s | Mô tả : %s | Trạng thái : %s |\n",catalogId,catalogName,description,catalogStatus?"Hoạt động":"Ẩn hoạt động");
+        System.out.println("---------------------------------------------");
     }
 
 }

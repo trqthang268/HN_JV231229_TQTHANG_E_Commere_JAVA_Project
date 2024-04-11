@@ -211,12 +211,14 @@ public class User implements Serializable {
             case ROLE_USER:
                 roleUser = "User";
                 System.out.printf("| Mã : %d | Tên : %s %s | Tên đăng nhập : %s | Mật khẩu : %s | Email : %s | Sdt : %s |\n",userId,firstName,lastName,userName,password,email,phoneNumber);
-                System.out.printf("| Địa chỉ : %s | Giỏ hàng : %s | Role : %s | Trạng thái : %s |",address,cartItemList.toString(),roleUser,userStatus?"Unblock":"Block");
+                System.out.printf("| Địa chỉ : %s | Giỏ hàng : %s | Role : %s | Trạng thái : %s |\n",address,cartItemList.toString(),roleUser,userStatus?"Unblock":"Block");
+                System.out.println("---------------------------------------------");
                 break;
             case ROLE_ADMIN:
                 roleUser = "Admin";
                 System.out.printf("| Mã : %d | Tên : %s %s | Tên đăng nhập : %s | Mật khẩu : %s | Email : %s | Sdt : %s |\n",userId,firstName,lastName,userName,password,email,phoneNumber);
-                System.out.printf("| Địa chỉ : %s | Role : %s | Trạng thái : %s |",address,roleUser,userStatus?"Unblock":"Block");
+                System.out.printf("| Địa chỉ : %s | Role : %s | Trạng thái : %s |\n",address,roleUser,userStatus?"Unblock":"Block");
+                System.out.println("---------------------------------------------");
                 break;
         }
         }

@@ -6,11 +6,12 @@ import ra.config.InputMethods;
 
 import java.sql.SQLOutput;
 
+import static ra.presentation.Main.authentication;
 import static ra.presentation.Main.userActive;
+import static ra.presentation.adminmanagement.ProductManagement.productImplement;
 
 public class HomePage {
-    ProductImplement productImplement = new ProductImplement();
-    AuthenticationService authication = new AuthenticationService();
+
     public void displayHomePage() {
         while (true) {
             System.out.println("============TRANG CHỦ===========");
@@ -39,7 +40,7 @@ public class HomePage {
                     productImplement.displayProductByPrice();
                     break;
                 case 6:
-                    authication.addToCart(userActive);
+                    authentication.addToCart(userActive);
                     break;
                 case 7:
                     return;

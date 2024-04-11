@@ -3,6 +3,8 @@ package ra.presentation;
 import ra.config.InputMethods;
 import ra.presentation.usermanagement.*;
 
+import static ra.presentation.Main.userActive;
+
 public class MenuUser {
     Cart cart = new Cart();
     HomePage homePage = new HomePage();
@@ -37,6 +39,7 @@ public class MenuUser {
                     orderHistory.displayOrderHistoryMenu();
                     break;
                 case 6:
+                    userActive = null;
                     return;
                 default:
                     System.err.println("Lựa chọn sai. Vui lòng nhập lại!");

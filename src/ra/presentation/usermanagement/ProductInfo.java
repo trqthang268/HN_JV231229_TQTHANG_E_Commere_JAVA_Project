@@ -4,11 +4,11 @@ import ra.business.implement.AuthenticationService;
 import ra.business.implement.ProductImplement;
 import ra.config.InputMethods;
 
+import static ra.presentation.Main.authentication;
 import static ra.presentation.Main.userActive;
+import static ra.presentation.adminmanagement.ProductManagement.productImplement;
 
 public class ProductInfo {
-    ProductImplement productImplement = new ProductImplement();
-    AuthenticationService authenticationService = new AuthenticationService();
     public void displayProductInfoMenu() {
         while (true) {
             System.out.println("============PRODUCT INFO MENU===========");
@@ -22,7 +22,7 @@ public class ProductInfo {
                     productImplement.displayProductById();
                     break;
                 case 2:
-                    authenticationService.addToCart(userActive);
+                    authentication.addToCart(userActive);
                     break;
                 case 3:
                     return;

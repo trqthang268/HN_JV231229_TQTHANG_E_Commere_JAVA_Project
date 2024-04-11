@@ -7,7 +7,7 @@ import ra.config.InputMethods;
 import java.sql.SQLOutput;
 
 public class ProductManagement {
-    IProductDesign productImplement = new ProductImplement();
+    public static ProductImplement productImplement = new ProductImplement();
     public void displayProductMenu(){
         while (true){
             System.out.println("==========MENU PRODUCT=========");

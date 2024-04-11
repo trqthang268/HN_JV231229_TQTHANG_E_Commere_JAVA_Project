@@ -153,7 +153,7 @@ public class Products implements Serializable {
         }
         System.out.println("=====Danh sách danh mục=====");
         for (int i = 0; i < catalogsList.size(); i++) {
-            System.out.printf("| STT : %-3d | Tên : %-30s |",(i+1),catalogsList.get(i).getCatalogName());
+            System.out.printf("| STT : %-3d | Tên : %-30s |\n",(i+1),catalogsList.get(i).getCatalogName());
         }
         System.out.println("=====Lựa chọn của bạn : =====");
         int choice = InputMethods.getInteger();
@@ -193,8 +193,13 @@ public class Products implements Serializable {
         }
     }
 
-    public void displayDataProduct(){
+    public void displayDataProduct(){ // thông tin admin xem
         System.out.printf("| Mã sp : %d | Tên sp : %s | Danh mục : %s | Mô tả : %s | Đơn giá : %f | Số lượng : %d | Thời gian tạo : %s | Thời gian cập nhật gần nhất : %s | Trạng thái : %s |\n",productId,productName,categoryId,description,unitPrice,stock,createdAt,updateAt,productStatus?"Đang bán":"Ngưng bán");
+        System.out.println("---------------------------------------------");
+    }
+
+    public void displayProductForCustomer(){ // thông tin khách hàng xem
+        System.out.printf("| Mã sản phẩm : %d | Tên sản phẩm : %s | Danh mục : %s | Mô tả : %s | Đơn giá : %f |\n",productId,productName,categoryId,description,unitPrice);
     }
 
 }

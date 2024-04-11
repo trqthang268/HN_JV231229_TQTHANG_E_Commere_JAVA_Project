@@ -5,11 +5,11 @@ import ra.business.implement.AuthenticationService;
 import ra.business.implement.OrderImplement;
 import ra.config.InputMethods;
 
+import static ra.presentation.Main.authentication;
 import static ra.presentation.Main.userActive;
+import static ra.presentation.adminmanagement.OrderManagement.orderImplement;
 
 public class Cart {
-    AuthenticationService authication = new AuthenticationService();
-    OrderImplement orderImplement = new OrderImplement();
     public void displayCartMenu(){
         while (true) {
             System.out.println("============CART MENU===========");
@@ -22,13 +22,13 @@ public class Cart {
             byte choice = InputMethods.getByte();
             switch (choice) {
                 case 1:
-                    authication.showListCart(userActive);
+                    authentication.showListCart(userActive);
                     break;
                 case 2:
-                    authication.changeQuantityItem(userActive);
+                    authentication.changeQuantityItem(userActive);
                     break;
                 case 3:
-                    authication.deleteCartItem(userActive);
+                    authentication.deleteCartItem(userActive);
                     break;
                 case 4:
                     orderImplement.getOrder(userActive);

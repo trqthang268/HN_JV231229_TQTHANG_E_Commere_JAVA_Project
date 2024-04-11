@@ -4,8 +4,10 @@ import ra.business.design.IAuthication;
 import ra.business.implement.AuthenticationService;
 import ra.config.InputMethods;
 
+import static ra.presentation.Main.authentication;
+
 public class UserManagement {
-    IAuthication authication = new AuthenticationService();
+
     public void displayUserMenu(){
         while (true) {
             System.out.println("========USER MENU========");
@@ -17,13 +19,13 @@ public class UserManagement {
             byte choice = InputMethods.getByte();
             switch (choice) {
                 case 1:
-                    authication.displayUserList();
+                    authentication.displayUserList();
                     break;
                 case 2:
-                    authication.searchUserByName();
+                    authentication.searchUserByName();
                     break;
                 case 3:
-                    authication.changeUserStatus();
+                    authentication.changeUserStatus();
                     break;
                 case 4:
                     return;

@@ -50,6 +50,7 @@ public class OrderImplement implements IOderDesign {
             if (orderList.get(indexOrder).getOrderStatus().equals(OrderStatus.STATUS_WAITING)) {
                 orderList.get(indexOrder).setOrderStatus(OrderStatus.STATUS_SUCCESS);
                 System.out.println("Đã xác nhận hóa đơn đang chờ");
+                IOFile.writeToFile(IOFile.ODER_PATH,orderList);
             } else {
                 System.out.println("Trạng thái của hóa đơn hiện không ở trại thái chờ");
             }
@@ -75,6 +76,7 @@ public class OrderImplement implements IOderDesign {
         } else {
             if (orderList.get(indexOrder).getOrderStatus().equals(OrderStatus.STATUS_WAITING)) {
                 orderList.remove(orderList.get(indexOrder));
+                IOFile.writeToFile(IOFile.ODER_PATH,orderList);
             } else {
                 System.out.println("Đơn hàng hiện tại không thể hủy do đã xác nhận hoặc đang được giao");
             }

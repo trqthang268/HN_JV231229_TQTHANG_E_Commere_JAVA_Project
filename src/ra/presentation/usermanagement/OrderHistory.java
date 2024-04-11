@@ -4,9 +4,9 @@ import ra.business.implement.OrderImplement;
 import ra.config.InputMethods;
 
 import static ra.presentation.Main.userActive;
+import static ra.presentation.adminmanagement.OrderManagement.orderImplement;
 
 public class OrderHistory {
-    OrderImplement orderImplement = new OrderImplement();
     public void displayOrderHistoryMenu(){
         while (true) {
             System.out.println("=============ORDER HISTORY MENU=============");

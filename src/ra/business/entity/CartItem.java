@@ -32,5 +32,6 @@ public class CartItem implements Serializable {
 
     public void displayCartItemData(){
         System.out.printf("| Mã sản phẩm : %d | Số lượng : %d |\n",productId,quantity);
+        System.out.println("---------------------------------------------");
     }
 }

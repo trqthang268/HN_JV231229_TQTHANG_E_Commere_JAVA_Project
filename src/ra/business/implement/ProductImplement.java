@@ -10,13 +10,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import static ra.business.implement.CatalogImplement.catalogsList;
+import static ra.presentation.adminmanagement.CatalogManagement.catalogImplement;
 
 public class ProductImplement implements IProductDesign {
     public static List<Products> productsList;
     static {
         productsList = IOFile.readFromFile(IOFile.PRODUCTS_PATH);
     }
-    CatalogImplement catalogImplement = new CatalogImplement();
 
     @Override
     public void displayAllProducts() {
@@ -57,6 +57,7 @@ public class ProductImplement implements IProductDesign {
             System.out.println("Nhập thông tin mới cho sản phẩm");
             productsList.get(editIdIndex).inputDataProduct(false);
             System.out.println("Cập nhật thông tin thành công");
+            IOFile.writeToFile(IOFile.PRODUCTS_PATH,productsList);
         }
 
     }
@@ -69,6 +70,7 @@ public class ProductImplement implements IProductDesign {
         System.out.println("Trạng thái cũ của sản phẩm là "+(productsList.get(statusIdIndex).isProductStatus()?"Đang bán":"Ngưng bán"));
         productsList.get(statusIdIndex).setProductStatus(!productsList.get(statusIdIndex).isProductStatus());
         System.out.println("Trạng thái mới của sản phẩm là "+(productsList.get(statusIdIndex).isProductStatus()?"Đang bán":"Ngưng bán"));
+        IOFile.writeToFile(IOFile.PRODUCTS_PATH,productsList);
     }
 
     @Override
@@ -97,11 +99,11 @@ public class ProductImplement implements IProductDesign {
     public void findProductInHomePage(){
         System.out.println("Nhập tên sản phẩm cần tìm");
         String searchName = InputMethods.getString();
-        boolean isExist = productsList.stream().anyMatch(products -> products.getProductName().equalsIgnoreCase(searchName));
+        boolean isExist = productsList.stream().anyMatch(products -> products.getProductName().contains(searchName));
         if (isExist){
             for (Products products : productsList) {
-                if (products.isProductStatus() && checkStatusCatalogById(products.getCategoryId())){
-                    products.displayDataProduct();
+                if (products.isProductStatus() && checkStatusCatalogById(products.getCategoryId()) && products.getProductName().contains(searchName)){
+                    products.displayProductForCustomer();
                     System.out.println("-----------------------------");
                 }
             }
@@ -126,7 +128,7 @@ public class ProductImplement implements IProductDesign {
     public void displayTop10Products() {
         productsList.sort(Comparator.comparing(Products::getStock));
         System.out.println("10 sản phẩm nổi bật :");
-        productsList.stream().limit(10).forEach(Products::displayDataProduct); // hiển thị những sản phẩm còn ít số lượng nhất
+        productsList.stream().limit(10).forEach(Products::displayProductForCustomer); // hiển thị những sản phẩm còn ít số lượng nhất
     }
 
     public void displayProductByCatalog() {
@@ -138,7 +140,7 @@ public class ProductImplement implements IProductDesign {
             System.out.println("Danh sách sản phẩm của danh mục trên :");
             for (Products products : productsList) {
                 if (products.getCategoryId().equals(catalogId)) {
-                    products.displayDataProduct();
+                    products.displayProductForCustomer();
                     System.out.println("-----------------------------------------");
                 }
             }
@@ -149,7 +151,7 @@ public class ProductImplement implements IProductDesign {
         System.out.println("Danh sách toàn bộ sản phẩm :");
         for (Products products : productsList) {
             if (products.isProductStatus() && checkStatusCatalogById(products.getCategoryId())){
-                products.displayDataProduct();
+                products.displayProductForCustomer();
                 System.out.println("-----------------------------");
             }
         }
@@ -160,6 +162,7 @@ public class ProductImplement implements IProductDesign {
             System.out.println("Sắp xếp sản phẩm theo :");
             System.out.println("1. Giá tăng dần");
             System.out.println("2. Giá giảm dần");
+            System.out.println("3. Quay lại");
             byte choice = InputMethods.getByte();
             switch (choice) {
                 case 1:
@@ -170,6 +173,8 @@ public class ProductImplement implements IProductDesign {
                     productsList.sort((o1, o2) -> (int) (o2.getUnitPrice()-o1.getUnitPrice()));
                     displayProductInHomePage();
                     break;
+                case 3:
+                    return;
                 default:
                     System.err.println("Vui lòng nhập 1 hoặc 2.");
             }

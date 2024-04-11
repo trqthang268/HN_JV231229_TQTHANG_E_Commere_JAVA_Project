@@ -1,6 +1,5 @@
 package ra.presentation;
 
-import ra.business.design.IAuthication;
 import ra.business.entity.RoleNameUser;
 import ra.business.entity.User;
 import ra.business.implement.AuthenticationService;
@@ -10,9 +9,9 @@ import ra.config.InputMethods;
 import static ra.business.implement.AuthenticationService.userList;
 
 public class Main {
-    private static MenuAdmin menuAdmin = new MenuAdmin();
-    private static MenuUser menuUser = new MenuUser();
-    private static IAuthication authication = new AuthenticationService();
+    public static MenuAdmin menuAdmin = new MenuAdmin();
+    public static MenuUser menuUser = new MenuUser();
+    public static AuthenticationService authentication = new AuthenticationService();
     public static User userActive = null;
 
     public static void main(String[] args) {
@@ -46,7 +45,7 @@ public class Main {
         System.out.println("Nhập password :");
         String password = InputMethods.getString();
 
-        User userLogin = authication.login(username,password);
+        User userLogin = authentication.login(username,password);
         if (userLogin == null){
             System.err.println("Tên đăng nhập hoặc mật khẩu không chính xác");
             System.out.println("1. Đăng nhập lại");
@@ -87,24 +86,25 @@ public class Main {
 
     public static void register(){
         System.out.println("==============Đăng kí=============");
-        User user = new User();
+        User newUser = new User();
         System.out.println("Nhập tên đăng nhập :");
-        user.inputUserName(userList);
+        newUser.inputUserName(userList);
         System.out.println("Nhập họ :");
-        user.inputFirstName();
+        newUser.inputFirstName();
         System.out.println("Nhập tên :");
-        user.inputLastName();
+        newUser.inputLastName();
         System.out.println("Nhập password :");
-        user.inputPassword();
+        newUser.inputPassword();
         System.out.println("Nhập email :");
-        user.inputEmail(userList);
+        newUser.inputEmail(userList);
         System.out.println("Nhập số điện thoại :");
-        user.inputPhone(userList);
+        newUser.inputPhone(userList);
         System.out.println("Nhập địa chỉ :");
-        user.inputAddress();
+        newUser.inputAddress();
         System.out.println("========Đăng kí thành công=========");
-        authication.register(user); // set giá trị mặc định cho user bình thường
+        authentication.register(newUser); // set giá trị mặc định cho user bình thường
+        userList.add(newUser);
+        IOFile.writeToFile(IOFile.USER_PATH, userList);
         login();
     }
-
 }

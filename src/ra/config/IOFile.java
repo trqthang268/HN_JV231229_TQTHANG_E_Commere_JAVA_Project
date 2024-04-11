@@ -14,7 +14,7 @@ public class IOFile {
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
         try {
-            fos = new FileOutputStream(path,true);
+            fos = new FileOutputStream(file);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(list);
         } catch (FileNotFoundException e) {

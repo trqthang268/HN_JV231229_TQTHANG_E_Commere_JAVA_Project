@@ -9,10 +9,11 @@ import ra.config.InputMethods;
 import java.util.Comparator;
 import java.util.List;
 
+import static ra.presentation.adminmanagement.ProductManagement.productImplement;
+
 public class AuthenticationService implements IAuthication {
     public static List<User> userList;
 
-    ProductImplement productImplement = new ProductImplement();
     static {
         userList = IOFile.readFromFile(IOFile.USER_PATH);
         User admin = new User(1, "Truong", "Thang", "admin123", BCrypt.hashpw("admin123", BCrypt.gensalt(5)), "admin123@gmail.com", "0987654321", "Số 1, khu A11, Vencam City, Ha Noi", null, RoleNameUser.ROLE_ADMIN, true);
@@ -45,8 +46,6 @@ public class AuthenticationService implements IAuthication {
         user.setUserStatus(true);
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(5)));
 
-        userList.add(user);
-        IOFile.writeToFile(IOFile.USER_PATH, userList);
     }
 
     @Override
@@ -150,6 +149,7 @@ public class AuthenticationService implements IAuthication {
                 }
             }
             System.out.println("Thêm vào giỏ hàng thành công");
+            IOFile.writeToFile(IOFile.USER_PATH,userList);
         }
     }
 
@@ -180,6 +180,7 @@ public class AuthenticationService implements IAuthication {
                         }
                     }
                     System.out.println("Hoàn tất thay đổi");
+                    IOFile.writeToFile(IOFile.USER_PATH,userList);
                     break;
                 }
             }
@@ -203,6 +204,7 @@ public class AuthenticationService implements IAuthication {
                             userList.set(i,user);
                         }
                     }
+                    IOFile.writeToFile(IOFile.USER_PATH,userList);
                     break;
                 }
             }

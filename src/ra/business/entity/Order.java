@@ -177,6 +177,7 @@ public class Order implements Serializable {
          System.out.printf("| Mã hóa đơn : %d | Mã người mua : %d | Tên người nhận : %s | SDT người nhận : %s | Địa chỉ người nhận : %s |\n",orderId,userId,nameReceive,receivePhoneNumber,receiveAddress);
          System.out.printf("| Tổng tiền : %f | Trạng thái đơn hàng : %s | Danh sách chi tiết : %s |\n",total,orderstatus,oderDetails.toString());
          System.out.printf("| Ngày đặt hàng : %s | Ngày dự kiến giao hàng : %s",orderAt.toString(),deliverAt.toString());
+         System.out.println("---------------------------------------------");
      }
 
 }
