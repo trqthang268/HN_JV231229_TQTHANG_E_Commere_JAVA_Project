@@ -3,13 +3,16 @@ package ra.business.implement;
 import ra.business.design.IProductDesign;
 import ra.business.entity.Catalogs;
 import ra.business.entity.Products;
+import ra.config.Alert;
 import ra.config.IOFile;
 import ra.config.InputMethods;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
 import static ra.business.implement.CatalogImplement.catalogsList;
+import static ra.config.Alert.*;
 import static ra.presentation.adminmanagement.CatalogManagement.catalogImplement;
 
 public class ProductImplement implements IProductDesign {
@@ -26,7 +29,6 @@ public class ProductImplement implements IProductDesign {
             System.out.println("Danh sách sản phẩm :");
             productsList.sort(Comparator.comparing(Products::getCreatedAt)); // sắp xếp theo thời gian thêm mới nhất
             productsList.forEach(Products::displayDataProduct);
-            System.out.println("---------------------");
         }
     }
 
@@ -50,14 +52,55 @@ public class ProductImplement implements IProductDesign {
         int editId = InputMethods.getInteger();
         int editIdIndex = findIndexById(editId);
         if (editIdIndex == -1){
-            System.err.println("Không tìm thấy sản phẩm chứa mã này");
+            System.err.println(PRODUCT_ID_NOTFOUND);
         }else{
             System.out.println("Thông tin cũ của sản phẩm");
             productsList.get(editIdIndex).displayDataProduct();
-            System.out.println("Nhập thông tin mới cho sản phẩm");
-            productsList.get(editIdIndex).inputDataProduct(false);
-            System.out.println("Cập nhật thông tin thành công");
-            IOFile.writeToFile(IOFile.PRODUCTS_PATH,productsList);
+            byte choice;
+            do {
+                System.out.println("Thông tin có thể chỉnh sửa:");
+                System.out.println("1. Tên sản phẩm");
+                System.out.println("2. Danh mục sản phẩm");
+                System.out.println("3. Mô tả/ Thông số");
+                System.out.println("4. Đơn giá");
+                System.out.println("5. Số lượng trong kho");
+                System.out.println("6. Trạng thái");
+                System.out.println("7. Chỉnh sửa toàn bộ");
+                System.out.println("8. Lưu chỉnh sửa");
+                System.out.println("Lựa chọn của bạn :");
+                choice = InputMethods.getByte();
+                switch (choice){
+                    case 1:
+                        productsList.get(editIdIndex).setProductName(productsList.get(editIdIndex).inputProductName(productsList));
+                        break;
+                    case 2:
+                        productsList.get(editIdIndex).setCategoryId(productsList.get(editIdIndex).inputCatalogId(catalogsList));
+                        break;
+                    case 3:
+                        productsList.get(editIdIndex).setDescription(productsList.get(editIdIndex).inputDescription());
+                        break;
+                    case 4:
+                        productsList.get(editIdIndex).setUnitPrice(productsList.get(editIdIndex).inputUnitPrice());
+                        break;
+                    case 5:
+                        productsList.get(editIdIndex).setStock(productsList.get(editIdIndex).inputStock());
+                        break;
+                    case 6:
+                        productsList.get(editIdIndex).setProductStatus(InputMethods.getBoolean());
+                        break;
+                    case 7:
+                        System.out.println("Nhập thông tin mới cho sản phẩm");
+                        productsList.get(editIdIndex).inputDataProduct(false);
+                    case 8:
+                        productsList.get(editIdIndex).setUpdateAt(LocalDate.now());
+                        System.out.println("Cập nhật thông tin thành công");
+                        IOFile.writeToFile(IOFile.PRODUCTS_PATH,productsList);
+                        break;
+                    default:
+                        System.err.println(WRONG_CHOICE);
+                        break;
+                }
+            }while (choice!=8);
         }
 
     }
@@ -67,22 +110,26 @@ public class ProductImplement implements IProductDesign {
         System.out.println("Nhập mã sản phẩm muốn sửa trạng thái");
         int changeStatusId = InputMethods.getInteger();
         int statusIdIndex = findIndexById(changeStatusId);
-        System.out.println("Trạng thái cũ của sản phẩm là "+(productsList.get(statusIdIndex).isProductStatus()?"Đang bán":"Ngưng bán"));
-        productsList.get(statusIdIndex).setProductStatus(!productsList.get(statusIdIndex).isProductStatus());
-        System.out.println("Trạng thái mới của sản phẩm là "+(productsList.get(statusIdIndex).isProductStatus()?"Đang bán":"Ngưng bán"));
-        IOFile.writeToFile(IOFile.PRODUCTS_PATH,productsList);
+        if (statusIdIndex == -1){
+            System.err.println(PRODUCT_ID_NOTFOUND);
+        }else {
+            System.out.println("Trạng thái cũ của sản phẩm là " + (productsList.get(statusIdIndex).isProductStatus() ? "Đang bán" : "Ngưng bán"));
+            productsList.get(statusIdIndex).setProductStatus(!productsList.get(statusIdIndex).isProductStatus());
+            System.out.println("Trạng thái mới của sản phẩm là " + (productsList.get(statusIdIndex).isProductStatus() ? "Đang bán" : "Ngưng bán"));
+            IOFile.writeToFile(IOFile.PRODUCTS_PATH, productsList);
+        }
     }
 
     @Override
     public void searchProductByName() {
         System.out.println("Nhập tên sản phẩm cần tìm");
         String searchName  = InputMethods.getString();
-        boolean isExist = productsList.stream().anyMatch(products -> products.getProductName().equalsIgnoreCase(searchName));
+        boolean isExist = productsList.stream().anyMatch(products -> products.getProductName().contains(searchName));
         if (isExist){
             System.out.println("Sản phẩm cần tìm :");
-            productsList.stream().filter(products -> products.getProductName().equalsIgnoreCase(searchName)).forEach(Products::displayDataProduct);
+            productsList.stream().filter(products -> products.getProductName().contains(searchName)).forEach(Products::displayDataProduct);
         }else{
-            System.out.println("Không có sản phẩm cần tìm");
+            System.out.println(PRODUCT_NOTFOUND);
         }
     }
 
@@ -104,11 +151,10 @@ public class ProductImplement implements IProductDesign {
             for (Products products : productsList) {
                 if (products.isProductStatus() && checkStatusCatalogById(products.getCategoryId()) && products.getProductName().contains(searchName)){
                     products.displayProductForCustomer();
-                    System.out.println("-----------------------------");
                 }
             }
         }else {
-            System.out.println("Không có sản phẩm cần tìm");
+            System.out.println(PRODUCT_NOTFOUND);
         }
     }
 
@@ -134,14 +180,13 @@ public class ProductImplement implements IProductDesign {
     public void displayProductByCatalog() {
         System.out.println("Nhập mã danh mục :");
         String catalogId = InputMethods.getString();
-        if(catalogImplement.findIndexbyId(catalogId) == -1){
-            System.err.println("Mã danh mục không tồn tại");
+        if(catalogImplement.findIndexById(catalogId) == -1){
+            System.err.println(PRODUCT_ID_NOTFOUND);
         }else {
             System.out.println("Danh sách sản phẩm của danh mục trên :");
             for (Products products : productsList) {
                 if (products.getCategoryId().equals(catalogId)) {
                     products.displayProductForCustomer();
-                    System.out.println("-----------------------------------------");
                 }
             }
         }
@@ -152,7 +197,6 @@ public class ProductImplement implements IProductDesign {
         for (Products products : productsList) {
             if (products.isProductStatus() && checkStatusCatalogById(products.getCategoryId())){
                 products.displayProductForCustomer();
-                System.out.println("-----------------------------");
             }
         }
     }
@@ -176,20 +220,21 @@ public class ProductImplement implements IProductDesign {
                 case 3:
                     return;
                 default:
-                    System.err.println("Vui lòng nhập 1 hoặc 2.");
+                    System.err.println(WRONG_CHOICE);
             }
         }
     }
+
 
     public void displayProductById() {
         System.out.println("Nhập mã sản phẩm ");
         int productId = InputMethods.getInteger();
         int productIndex = findIndexById(productId);
         if (productIndex == -1){
-            System.err.println("Mã sản phẩm không tồn tại");
+            System.err.println(PRODUCT_ID_NOTFOUND);
         }else{
             System.out.println("Thông tin sản phẩm");
-            productsList.get(productIndex).displayDataProduct();
+            productsList.get(productIndex).displayProductForCustomer();
         }
     }
 }

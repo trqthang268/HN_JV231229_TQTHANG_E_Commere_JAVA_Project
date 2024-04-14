@@ -1,5 +1,6 @@
 package ra.business.entity;
 
+import ra.config.IOFile;
 import ra.config.InputMethods;
 
 import java.io.Serial;
@@ -11,6 +12,8 @@ import java.util.List;
 
 import static ra.business.implement.CatalogImplement.catalogsList;
 import static ra.business.implement.ProductImplement.productsList;
+import static ra.config.Alert.WRONG_CHOICE;
+import static ra.presentation.adminmanagement.CatalogManagement.catalogImplement;
 
 public class Products implements Serializable {
     @Serial
@@ -143,7 +146,7 @@ public class Products implements Serializable {
     }
 
     public int inputProductId() {
-        int maxId = productsList.stream().map(products -> products.getProductId()).max(Comparator.naturalOrder()).orElse(0);
+        int maxId = productsList.stream().map(Products::getProductId).max(Comparator.naturalOrder()).orElse(0);
         return maxId+1;
     }
     public String inputCatalogId(List<Catalogs> catalogsList){
@@ -155,13 +158,27 @@ public class Products implements Serializable {
         for (int i = 0; i < catalogsList.size(); i++) {
             System.out.printf("| STT : %-3d | Tên : %-30s |\n",(i+1),catalogsList.get(i).getCatalogName());
         }
-        System.out.println("=====Lựa chọn của bạn : =====");
-        int choice = InputMethods.getInteger();
-        if (choice > 0 && choice <= catalogsList.size() ) {
-            return catalogsList.get(choice - 1).getCatalogId();
-        }else{
-            System.err.println("Lựa chọn không hợp lệ");
-            return null;
+        while(true) {
+            System.out.println("=====Lựa chọn của bạn : =====");
+            int choice = InputMethods.getInteger();
+            if (choice > 0 && choice <= catalogsList.size()) {
+                return catalogsList.get(choice - 1).getCatalogId();
+            } else {
+                System.err.println(WRONG_CHOICE);
+                System.out.println("Thêm danh mục mới không?");
+                System.out.println("1. Có");
+                System.out.println("2. Không");
+                byte choice1 = InputMethods.getByte();
+                switch (choice1){
+                    case 1 :
+                        catalogImplement.addNewCatalog();
+                        inputCatalogId(catalogsList);
+                        break;
+                    default:
+                        return null;
+                }
+
+            }
         }
     }
     public String inputDescription(){
@@ -200,6 +217,6 @@ public class Products implements Serializable {
 
     public void displayProductForCustomer(){ // thông tin khách hàng xem
         System.out.printf("| Mã sản phẩm : %d | Tên sản phẩm : %s | Danh mục : %s | Mô tả : %s | Đơn giá : %f |\n",productId,productName,categoryId,description,unitPrice);
+        System.out.println("---------------------------------------------");
     }
-
 }

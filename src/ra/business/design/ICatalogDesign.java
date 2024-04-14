@@ -6,5 +6,5 @@ public interface ICatalogDesign {
     void searchCatalogByName();
     void editCatalogInfo();
     void changeCatalogStatus();
-    int findIndexbyId(String id);
+    int findIndexById(String id);
 }

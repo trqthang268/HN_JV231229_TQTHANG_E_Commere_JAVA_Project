@@ -81,7 +81,7 @@ public class Catalogs implements Serializable {
         this.createdAt = LocalDateTime.now();
     }
 
-    private String inputCatalogId(List<Catalogs> catalogsList) {
+    public String inputCatalogId(List<Catalogs> catalogsList) {
         while (true){
             System.out.println("Nhập mã danh mục");
             String catalogId = InputMethods.getString();
@@ -99,7 +99,7 @@ public class Catalogs implements Serializable {
         }
     }
 
-    private String inputCatalogName(List<Catalogs> catalogsList) {
+    public String inputCatalogName(List<Catalogs> catalogsList) {
         while(true){
             System.out.println("Nhập tên danh mục");
             String catalogName = InputMethods.getString();

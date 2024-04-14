@@ -1,8 +1,11 @@
 package ra.presentation;
 
+import ra.config.Color;
+import ra.config.IOFile;
 import ra.config.InputMethods;
 import ra.presentation.usermanagement.*;
 
+import static ra.config.Alert.WRONG_CHOICE;
 import static ra.presentation.Main.userActive;
 
 public class MenuUser {
@@ -13,13 +16,14 @@ public class MenuUser {
     ProductInfo productInfo = new ProductInfo();
     public void displayMenuUser() {
         while (true){
-            System.out.println("===========MENU USER===============");
-            System.out.println("1. Trang chủ");
-            System.out.println("2. Chi tiết sản phẩm");
-            System.out.println("3. Giỏ hàng");
-            System.out.println("4. Trang thông tin cá nhân");
-            System.out.println("5. Lịch sử đơn hàng");
-            System.out.println("6. Đăng xuất");
+            System.out.println(Color.GREEN +"╔══════════════════MENU USER══════════════════╗");
+            System.out.println("║   1. Trang chủ                              ║");
+            System.out.println("║   2. Chi tiết sản phẩm                      ║");
+            System.out.println("║   3. Giỏ hàng                               ║");
+            System.out.println("║   4. Trang thông tin cá nhân                ║");
+            System.out.println("║   5. Lịch sử đơn hàng                       ║");
+            System.out.println("║   6. Đăng xuất                              ║");
+            System.out.println("╚═════════════════════════════════════════════╝"+Color.RESET);
             System.out.println("Lựa chọn của bạn");
             byte choice = InputMethods.getByte();
             switch (choice){
@@ -40,9 +44,10 @@ public class MenuUser {
                     break;
                 case 6:
                     userActive = null;
+                    IOFile.writeUserLogin(userActive);
                     return;
                 default:
-                    System.err.println("Lựa chọn sai. Vui lòng nhập lại!");
+                    System.err.println(WRONG_CHOICE);
             }
         }
     }

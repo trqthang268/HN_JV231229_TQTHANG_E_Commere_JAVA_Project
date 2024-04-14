@@ -1,20 +1,23 @@
 package ra.presentation.adminmanagement;
 
-import ra.business.design.IAuthication;
-import ra.business.implement.AuthenticationService;
+import ra.config.Color;
 import ra.config.InputMethods;
 
+import static ra.config.Alert.WRONG_CHOICE;
 import static ra.presentation.Main.authentication;
 
 public class UserManagement {
 
     public void displayUserMenu(){
         while (true) {
-            System.out.println("========USER MENU========");
-            System.out.println("1. Hiển thị danh sách người dùng");
-            System.out.println("2. Tìm kiếm người dùng theo tên");
-            System.out.println("3. Block/ Unblock tài khoản người dùng");
-            System.out.println("4. Quay lại ");
+            System.out.println(Color.PURPLE+"╔═══════════════════════════════════════╗");
+            System.out.println("║               USER MENU               ║");
+            System.out.println("╠═══════════════════════════════════════╣");
+            System.out.println("║ 1. Hiển thị danh sách người dùng      ║");
+            System.out.println("║ 2. Tìm kiếm người dùng theo tên       ║");
+            System.out.println("║ 3. Block/Unblock tài khoản người dùng ║");
+            System.out.println("║ 4. Quay lại                           ║");
+            System.out.println("╚═══════════════════════════════════════╝"+Color.RESET);
             System.out.println("Lựa chọn của bạn :");
             byte choice = InputMethods.getByte();
             switch (choice) {
@@ -30,7 +33,7 @@ public class UserManagement {
                 case 4:
                     return;
                 default:
-                    System.err.println("Nhập lựa chọn sai. Vui lòng nhập lại!");
+                    System.err.println(WRONG_CHOICE);
             }
         }
     }

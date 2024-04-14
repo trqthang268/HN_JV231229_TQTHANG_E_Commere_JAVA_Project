@@ -11,4 +11,18 @@ public interface IProductDesign {
     void changeStatusById();
 //    tìm kiếm sản phẩm theo tên
     void searchProductByName();
+
+    void displayProductById();
+
+    void displayProductByPrice();
+
+    void displayProductInHomePage();
+
+    void displayProductByCatalog();
+
+    void displayTop10Products();
+
+    void findProductInHomePage();
+
+    int findIndexById(int id);
 }

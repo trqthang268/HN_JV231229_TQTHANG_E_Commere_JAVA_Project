@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ra.business.implement.ProductImplement.productsList;
+import static ra.config.Alert.ORDER_ID_NOTFOUND;
 
 public class OrderImplement implements IOderDesign {
     public static List<Order> orderList;
@@ -45,12 +46,12 @@ public class OrderImplement implements IOderDesign {
         long inputOrderId = InputMethods.getLong();
         int indexOrder = findIndexOrderById(inputOrderId);
         if (indexOrder == -1) {
-            System.out.println("Mã hóa đơn không tồn tại");
+            System.out.println(ORDER_ID_NOTFOUND);
         } else {
             if (orderList.get(indexOrder).getOrderStatus().equals(OrderStatus.STATUS_WAITING)) {
                 orderList.get(indexOrder).setOrderStatus(OrderStatus.STATUS_SUCCESS);
                 System.out.println("Đã xác nhận hóa đơn đang chờ");
-                IOFile.writeToFile(IOFile.ODER_PATH,orderList);
+                IOFile.writeToFile(IOFile.ODER_PATH, orderList);
             } else {
                 System.out.println("Trạng thái của hóa đơn hiện không ở trại thái chờ");
             }
@@ -72,11 +73,11 @@ public class OrderImplement implements IOderDesign {
         long inputOrderId = InputMethods.getLong();
         int indexOrder = findIndexOrderById(inputOrderId);
         if (indexOrder == -1) {
-            System.out.println("Mã hóa đơn không tồn tại");
+            System.out.println(ORDER_ID_NOTFOUND);
         } else {
             if (orderList.get(indexOrder).getOrderStatus().equals(OrderStatus.STATUS_WAITING)) {
                 orderList.remove(orderList.get(indexOrder));
-                IOFile.writeToFile(IOFile.ODER_PATH,orderList);
+                IOFile.writeToFile(IOFile.ODER_PATH, orderList);
             } else {
                 System.out.println("Đơn hàng hiện tại không thể hủy do đã xác nhận hoặc đang được giao");
             }
@@ -86,42 +87,49 @@ public class OrderImplement implements IOderDesign {
     @Override
     public void oldOrderUser(User user) {
         System.out.println("Lịch sử đơn hàng");
-        boolean isExist = orderList.stream().anyMatch(order -> order.getUserId()==user.getUserId());
+        boolean isExist = orderList.stream().anyMatch(order -> order.getUserId() == user.getUserId());
         if (isExist) {
             for (Order order : orderList) {
                 if (order.getUserId() == user.getUserId()) {
                     order.displayOrderData();
                 }
             }
-        }else {
+        } else {
             System.out.println("Lịch sử đơn hàng trống");
         }
     }
 
     @Override
-    public void getOrder(User user) { // lấy dữ liệu từ cart của user để thiết lập order
+    public void getOrder(User user) throws NullPointerException { // lấy dữ liệu từ cart của user để thiết lập order
         List<CartItem> cartItems = user.getCart(); // lấy cart của user hiện tại
-        List<OrderDetail> orderDetails = new ArrayList<>(); // tạo list orderDetail mới
-        Order newOrder = new Order(); // tạo đổi tượng order mới
-        for (CartItem cartItem : cartItems) { // chuyển dữ liệu từ cartItem sang orderDetail tương ứng
-            OrderDetail newOrderDetail = new OrderDetail();
-            newOrderDetail.setProductId(cartItem.getProductId());
-            newOrderDetail.setQuantity(cartItem.getQuantity());
-            newOrderDetail.setProductName(getNameProductById(cartItem.getProductId()));
-            newOrderDetail.setUnitPrice(getUnitPriceById(cartItem.getProductId()));
-            orderDetails.add(newOrderDetail);
+        if (cartItems == null) {
+            System.err.println("Giỏ hàng trống");
+        } else {
+            List<OrderDetail> orderDetails = new ArrayList<>(); // tạo list orderDetail mới
+            Order newOrder = new Order(); // tạo đổi tượng order mới
+            for (CartItem cartItem : cartItems) { // chuyển dữ liệu từ cartItem sang orderDetail tương ứng
+                OrderDetail newOrderDetail = new OrderDetail();
+                newOrderDetail.setProductId(cartItem.getProductId());
+                newOrderDetail.setQuantity(cartItem.getQuantity());
+                newOrderDetail.setProductName(getNameProductById(cartItem.getProductId()));
+                newOrderDetail.setUnitPrice(getUnitPriceById(cartItem.getProductId()));
+                orderDetails.add(newOrderDetail);
+            }
+            user.setCart(null); //xóa dữ liệu cart của user
+            double newTotal = 0; // tính tổng tiền thông qua đơn gía và số lượng trong orderDetail
+            for (OrderDetail orderDetail : orderDetails) {
+                newTotal += (orderDetail.getUnitPrice() * orderDetail.getQuantity());
+            }
+            newOrder.setOderDetails(orderDetails); // gán list oderDetail vào đối tượng order mới
+            newOrder.setUserId(user.getUserId()); // gán mã ng dùng trong order từ ng dùng đăng nhập
+            newOrder.setTotal(newTotal); //gán tổng tiền
+            newOrder.inputDataOrder(); // nhập thông tin trong đơn hàng
+            orderList.add(newOrder);
+            IOFile.writeToFile(IOFile.ODER_PATH, orderList);
+            cartItems = new ArrayList<>();
+            user.setCart(cartItems);
+            System.out.println("Đặt hàng thành công");
         }
-        double newTotal = 0; // tính tổng tiền thông qua đơn gía và số lượng trong orderDetail
-        for (OrderDetail orderDetail : orderDetails) {
-            newTotal += (orderDetail.getUnitPrice() * orderDetail.getQuantity());
-        }
-        newOrder.setOderDetails(orderDetails); // gán list oderDetail vào đối tượng order mới
-        newOrder.setUserId(user.getUserId()); // gán mã ng dùng trong order từ ng dùng đăng nhập
-        newOrder.setTotal(newTotal); //gán tổng tiền
-        newOrder.inputDataOrder(); // nhập thông tin trong đơn hàng
-        orderList.add(newOrder);
-        IOFile.writeToFile(IOFile.ODER_PATH, orderList);
-        System.out.println("Đặt hàng thành công");
     }
 
     public String getNameProductById(long id) { // lấy tên sản phẩm từ mã sp

@@ -1,11 +1,14 @@
 package ra.presentation;
 
+import ra.config.Color;
+import ra.config.IOFile;
 import ra.config.InputMethods;
 import ra.presentation.adminmanagement.CatalogManagement;
 import ra.presentation.adminmanagement.OrderManagement;
 import ra.presentation.adminmanagement.ProductManagement;
 import ra.presentation.adminmanagement.UserManagement;
 
+import static ra.config.Alert.WRONG_CHOICE;
 import static ra.presentation.Main.userActive;
 
 public class MenuAdmin {
@@ -15,12 +18,13 @@ public class MenuAdmin {
     OrderManagement orderManagement = new OrderManagement();
     public void displayMenuAdmin() {
         while (true) {
-            System.out.println("==========MENU ADMIN============");
-            System.out.println("1. Quản lí người dùng");
-            System.out.println("2. Quản lí danh mục");
-            System.out.println("3. Quản lí sản phẩm");
-            System.out.println("4. Quản lí hóa đơn");
-            System.out.println("5. Đăng xuất");
+            System.out.println(Color.GREEN +"╔══════════════════MENU ADMIN══════════════════════╗");
+            System.out.println("║   1. Quản lí người dùng                          ║");
+            System.out.println("║   2. Quản lí danh mục                            ║");
+            System.out.println("║   3. Quản lí sản phẩm                            ║");
+            System.out.println("║   4. Quản lí hóa đơn                             ║");
+            System.out.println("║   5. Đăng xuất                                   ║");
+            System.out.println("╚══════════════════════════════════════════════════╝"+Color.RESET);
             System.out.println("Lựa chọn của bạn");
             byte choice = InputMethods.getByte();
             switch (choice){
@@ -38,9 +42,10 @@ public class MenuAdmin {
                     break;
                 case 5 :
                     userActive = null;
+                    IOFile.writeUserLogin(userActive);
                     return;
                 default:
-                    System.err.println("Nhập lựa chọn sai. Vui lòng nhập lại!");
+                    System.err.println(WRONG_CHOICE);
             }
         }
     }

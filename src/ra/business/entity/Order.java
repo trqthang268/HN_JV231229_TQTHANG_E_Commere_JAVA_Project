@@ -133,12 +133,6 @@ public class Order implements Serializable {
         this.deliverAt = this.getOrderAt().plusDays(4);//tối thiểu 4 ngày sau đặt hàng
     }
 
-//    private long inputUserId() {
-//        System.out.println("Nhập mã người mua");
-//        long userIdInput = InputMethods.getLong();
-//        return userIdInput;
-//    }
-
     public long inputOrderId(List<Order> orderList) {
         long maxOrderId = orderList.stream().map(order -> order.getOrderId()).max(Comparator.naturalOrder()).orElse(0L);
         return maxOrderId+1;

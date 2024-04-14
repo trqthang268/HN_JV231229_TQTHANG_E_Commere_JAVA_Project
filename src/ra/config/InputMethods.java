@@ -24,7 +24,7 @@ public class InputMethods {
         while (true) {
             String result = getInput();
             if (result.equals("")) {
-                System.err.println(EMPTY_ALERT);
+                System.err.println(Color.YELLOW_BACKGROUND+EMPTY_ALERT+Color.RESET);
                 continue;
             }
             return result;
@@ -54,7 +54,7 @@ public class InputMethods {
             try {
                 return Byte.parseByte(getString());
             } catch (NumberFormatException errException) {
-                System.err.println(ERROR_ALERT);
+                System.err.println(Color.YELLOW_BACKGROUND+ERROR_ALERT+Color.RESET);
             }
         }
     }
@@ -67,7 +67,7 @@ public class InputMethods {
             try {
                 return Short.parseShort(getString());
             } catch (NumberFormatException errException) {
-                System.err.println(ERROR_ALERT);
+                System.err.println(Color.YELLOW_BACKGROUND+ERROR_ALERT+Color.RESET);
             }
         }
     }
@@ -80,7 +80,7 @@ public class InputMethods {
             try {
                 return Integer.parseInt(getString());
             } catch (NumberFormatException errException) {
-                System.err.println(ERROR_ALERT);
+                System.err.println(Color.YELLOW_BACKGROUND+ERROR_ALERT+Color.RESET);
             }
         }
     }
@@ -93,7 +93,7 @@ public class InputMethods {
             try {
                 return Long.parseLong(getString());
             } catch (NumberFormatException errException) {
-                System.err.println(ERROR_ALERT);
+                System.err.println(Color.YELLOW_BACKGROUND+ERROR_ALERT+Color.RESET);
             }
         }
     }
@@ -106,7 +106,7 @@ public class InputMethods {
             try {
                 return Float.parseFloat(getString());
             } catch (NumberFormatException errException) {
-                System.err.println(ERROR_ALERT);
+                System.err.println(Color.YELLOW_BACKGROUND+ERROR_ALERT+Color.RESET);
             }
         }
     }
@@ -119,7 +119,7 @@ public class InputMethods {
             try {
                 return Double.parseDouble(getString());
             } catch (NumberFormatException errException) {
-                System.err.println(ERROR_ALERT);
+                System.err.println(Color.YELLOW_BACKGROUND+ERROR_ALERT+Color.RESET);
             }
         }
     }
