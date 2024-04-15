@@ -122,7 +122,7 @@ public class AuthenticationService implements IAuthication {
     public void showListCart(User user) {
         try {
             List<CartItem> cartItems = user.getCart();
-            if (cartItems == null) {
+            if (cartItems == null || cartItems.isEmpty()) {
                 System.out.println("Giỏ hàng trống");
             } else {
                 System.out.println("Danh sách sản phẩm trong giỏ hàng");

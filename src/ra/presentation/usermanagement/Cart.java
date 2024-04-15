@@ -35,7 +35,6 @@ public class Cart {
                     break;
                 case 4:
                     orderImplement.getOrder(userActive);
-                    userActive= null;
                     IOFile.writeUserLogin(userActive);
                     userActive = IOFile.readUserActive();
                     break;

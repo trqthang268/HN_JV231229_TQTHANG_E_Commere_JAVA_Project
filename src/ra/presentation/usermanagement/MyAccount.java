@@ -25,7 +25,6 @@ public class MyAccount {
             switch (choice) {
                 case 1:
                     authentication.changePassword(userActive);
-                    userActive= null;
                     IOFile.writeUserLogin(userActive);
                     userActive= IOFile.readUserActive();
                     break;
@@ -34,7 +33,6 @@ public class MyAccount {
                     break;
                 case 3:
                     authentication.editUserInformation(userActive);
-                    userActive= null;
                     IOFile.writeUserLogin(userActive);
                     userActive = IOFile.readUserActive();
                     break;

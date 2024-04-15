@@ -44,7 +44,6 @@ public class HomePage {
                     break;
                 case 6:
                     authentication.addToCart(userActive);
-                    userActive= null;
                     IOFile.writeUserLogin(userActive);
                     userActive = IOFile.readUserActive();
                     break;

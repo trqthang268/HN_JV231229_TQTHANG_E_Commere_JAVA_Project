@@ -8,6 +8,7 @@ import ra.config.InputMethods;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ra.business.implement.AuthenticationService.userList;
 import static ra.business.implement.ProductImplement.productsList;
 import static ra.config.Alert.ORDER_ID_NOTFOUND;
 
@@ -102,7 +103,7 @@ public class OrderImplement implements IOderDesign {
     @Override
     public void getOrder(User user) throws NullPointerException { // lấy dữ liệu từ cart của user để thiết lập order
         List<CartItem> cartItems = user.getCart(); // lấy cart của user hiện tại
-        if (cartItems == null) {
+        if (cartItems == null || cartItems.isEmpty()) {
             System.err.println("Giỏ hàng trống");
         } else {
             List<OrderDetail> orderDetails = new ArrayList<>(); // tạo list orderDetail mới
@@ -125,9 +126,15 @@ public class OrderImplement implements IOderDesign {
             newOrder.setTotal(newTotal); //gán tổng tiền
             newOrder.inputDataOrder(); // nhập thông tin trong đơn hàng
             orderList.add(newOrder);
-            IOFile.writeToFile(IOFile.ODER_PATH, orderList);
             cartItems = new ArrayList<>();
             user.setCart(cartItems);
+            for (int i = 0; i < userList.size(); i++) { // cập nhật lưu người dùng hiện tại vào danh sách người dùng
+                if (userList.get(i).getUserId() == user.getUserId()) {
+                    userList.set(i, user);
+                }
+            }
+            IOFile.writeToFile(IOFile.ODER_PATH, orderList);
+            IOFile.writeToFile(IOFile.USER_PATH, userList);
             System.out.println("Đặt hàng thành công");
         }
     }
