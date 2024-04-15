@@ -18,14 +18,14 @@ import static ra.presentation.adminmanagement.ProductManagement.productImplement
 public class AuthenticationService implements IAuthication {
     public static List<User> userList;
 
-    static {
+    static { // tự động thêm tài khoản admin
         File user = new File(IOFile.USER_PATH);
-        if (user.length() == 0) {
+        if (user.length() == 0) { // khi tệp chứa người dùng trống thì thêm tk admin
             userList = IOFile.readFromFile(IOFile.USER_PATH);
             User admin = new User(1, "Truong", "Thang", "admin123", BCrypt.hashpw("admin123", BCrypt.gensalt(5)), "admin123@gmail.com", "0987654321", "Số 1, khu A11, Vencam City, Ha Noi", null, RoleNameUser.ROLE_ADMIN, true);
             userList.add(admin);
             IOFile.writeToFile(IOFile.USER_PATH, userList);
-        }else{
+        }else{ // khi tệp người dùng không trống nhưng không chứa tài khoản admin
             userList = IOFile.readFromFile(IOFile.USER_PATH);
             if (userList.stream().noneMatch(user1 -> user1.getRole().equals(RoleNameUser.ROLE_ADMIN))){
                 User admin = new User(1, "Truong", "Thang", "admin123", BCrypt.hashpw("admin123", BCrypt.gensalt(5)), "admin123@gmail.com", "0987654321", "Số 1, khu A11, Vencam City, Ha Noi", null, RoleNameUser.ROLE_ADMIN, true);

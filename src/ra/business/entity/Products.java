@@ -5,10 +5,12 @@ import ra.config.InputMethods;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import static ra.business.implement.CatalogImplement.catalogsList;
 import static ra.business.implement.ProductImplement.productsList;
@@ -216,7 +218,16 @@ public class Products implements Serializable {
     }
 
     public void displayProductForCustomer(){ // thông tin khách hàng xem
-        System.out.printf("| Mã sản phẩm : %d | Tên sản phẩm : %s | Danh mục : %s | Mô tả : %s | Đơn giá : %f |\n",productId,productName,categoryId,description,unitPrice);
+        String catalogName = findNameByIdCatalog(categoryId);
+        System.out.printf("| Mã sản phẩm : %d | Tên sản phẩm : %s | Danh mục : %s | Mô tả : %s | Đơn giá : %f |\n",productId,productName,catalogName,description,unitPrice);
         System.out.println("---------------------------------------------");
+    }
+    public String findNameByIdCatalog(String id){
+        for (Catalogs catalogs : catalogsList) {
+            if (catalogs.getCatalogId().equals(id)){
+                return catalogs.getCatalogName();
+            }
+        }
+        return null;
     }
 }

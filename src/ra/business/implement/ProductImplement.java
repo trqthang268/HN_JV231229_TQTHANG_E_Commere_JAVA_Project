@@ -27,23 +27,27 @@ public class ProductImplement implements IProductDesign {
             System.out.println("Danh sách sản phẩm trống");
         }else{
             System.out.println("Danh sách sản phẩm :");
-            productsList.sort(Comparator.comparing(Products::getCreatedAt)); // sắp xếp theo thời gian thêm mới nhất
+            productsList.sort(((o1, o2) -> o2.getStock()-o1.getStock())); // sắp xếp theo thời gian thêm mới nhất
             productsList.forEach(Products::displayDataProduct);
         }
     }
 
     @Override
     public void addNewProducts() {
-        System.out.println("Nhập số lượng sản phẩm muốn thêm");
-        int countNewProduct = InputMethods.getInteger();
-        for (int i = 0; i < countNewProduct; i++) {
-            System.out.println("Nhập thông tin cho sản phẩm thứ "+(i+1));
-            Products products = new Products();
-            products.inputDataProduct(true);
-            productsList.add(products);
+        if (catalogsList.isEmpty()){
+            System.err.println("Vui lòng tạo danh mục trước");
+        }else {
+            System.out.println("Nhập số lượng sản phẩm muốn thêm");
+            int countNewProduct = InputMethods.getInteger();
+            for (int i = 0; i < countNewProduct; i++) {
+                System.out.println("Nhập thông tin cho sản phẩm thứ " + (i + 1));
+                Products products = new Products();
+                products.inputDataProduct(true);
+                productsList.add(products);
+            }
+            IOFile.writeToFile(IOFile.PRODUCTS_PATH, productsList);
+            System.out.println("Đã thêm mới thành công");
         }
-        IOFile.writeToFile(IOFile.PRODUCTS_PATH,productsList);
-        System.out.println("Đã thêm mới thành công");
     }
 
     @Override
